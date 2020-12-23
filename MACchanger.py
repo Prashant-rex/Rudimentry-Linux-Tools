@@ -7,6 +7,19 @@ class MAC_CHANGER:
     def __init__(self):
         self.MAC = ""  # defining an empty variable
 
+    def validate_iface(self, iface): # to validate interface name
+        if(iface == "eth0"):
+            return True
+        elif(iface == "ens33"):
+            return True
+        elif(iface == "enp0s3"):
+            return True
+        elif(iface == "wlan0"):
+            return True
+        else:
+            return False
+        
+
     def get_MAC(self , interface):  # function to get the current MAC of the interface
         output = subprocess.run(["ifconfig", interface], shell = False, capture_output = True) # running the ifconfig command and storing the output in variable.
 
@@ -14,13 +27,14 @@ class MAC_CHANGER:
 
         mac_pattern = r'ether\s[\da-f]{2}:[\da-f]{2}:[\da-f]{2}:[\da-f]{2}:[\da-f]{2}:[\da-f]{2}' # regex to match MAC Address pattern from the output
         regex = re.compile(mac_pattern)
-        mac_string = regex.search(console_result)
-
-        current_mac = mac_string.group().split(" ")[1]
-
-        self.MAC = current_mac # assigning the current MAC value to variable
-
-        return current_mac
+        mac_string = (regex.search(console_result))
+        if (mac_string is None):
+            print("[-] Select appropriate interface.")
+            exit()
+        else:
+            current_mac = (mac_string.group().split(" ")[1])
+            self.MAC = current_mac # assigning the current MAC value to variable    
+            return current_mac
 
     def change_MAC(self, interface, new_mac): # function to change the MAC address of the interface.
         
@@ -54,16 +68,19 @@ mc = MAC_CHANGER() # creating object of MAC_CHANGER class
 
 print("[+] Specify the Network Interface. Run ifconfig if you don't know.")
 iface = input("[+] ")
-x = mc.get_MAC(iface) # calling the get_mac function and assigning the returned MAC to variable x.
-print("[+] Current MAC Address of" + iface + "is", x) # prints the current MAC
-print("[+] Enter the desired MAC Address ") 
-fake_mac = input("[+] ") # prompts the user to give a desired MAC
-is_valid = mc.check_valid(fake_mac) # checks whether MAC is of proper Format and assigns a boolen to is_valid. 
+iface_valid = mc.validate_iface(iface) # to check whether the interface name provided is from the default lists
 
-if(is_valid):
-    print("[+] Changing MAC Address.") # if true
-    y = mc.change_MAC(iface, fake_mac) #calls the change_MAC function
-    print("[+] New MAC Address is",y) # prints the New MAC Address.
+if(iface_valid):
+    x = mc.get_MAC(iface) # calling the get_mac function and assigning the returned MAC to variable x.
+    print("[+] Current MAC Address " + iface + " is", x) # prints the current MAC
+    print("[+] Enter the desired MAC Address ") 
+    fake_mac = input("[+] ") # prompts the user to give a desired MAC
+    is_valid = mc.check_valid(fake_mac) # checks whether MAC is of proper Format and assigns a boolen to is_valid. 
 
-
+    if(is_valid):
+        print("[+] Changing MAC Address.") # if true
+        y = mc.change_MAC(iface, fake_mac) #calls the change_MAC function
+        print("[+] New MAC Address is",y) # prints the New MAC Address.
+else:
+    print("[-] Check the name of the interface with internet connectivity.")
 
