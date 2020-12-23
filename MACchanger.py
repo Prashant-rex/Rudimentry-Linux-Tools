@@ -1,3 +1,5 @@
+#!/usr/bin/env/python
+
 import subprocess
 import re
 
@@ -49,16 +51,18 @@ class MAC_CHANGER:
 
 
 mc = MAC_CHANGER() # creating object of MAC_CHANGER class
-x = mc.get_MAC("eth0") # calling the get_mac function and assigning the returned MAC to variable x.
 
-print("[+] Current MAC Address is", x) # prints the current MAC
+print("[+] Specify the Network Interface. Run ifconfig if you don't know.")
+iface = input("[+] ")
+x = mc.get_MAC(iface) # calling the get_mac function and assigning the returned MAC to variable x.
+print("[+] Current MAC Address of" + iface + "is", x) # prints the current MAC
 print("[+] Enter the desired MAC Address ") 
 fake_mac = input("[+] ") # prompts the user to give a desired MAC
 is_valid = mc.check_valid(fake_mac) # checks whether MAC is of proper Format and assigns a boolen to is_valid. 
 
 if(is_valid):
     print("[+] Changing MAC Address.") # if true
-    y = mc.change_MAC("eth0", fake_mac) #calls the change_MAC function
+    y = mc.change_MAC(iface, fake_mac) #calls the change_MAC function
     print("[+] New MAC Address is",y) # prints the New MAC Address.
 
 
