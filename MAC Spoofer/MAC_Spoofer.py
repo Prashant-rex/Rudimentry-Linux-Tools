@@ -18,9 +18,12 @@ class MAC_SPOOF():
         broadcast_packet = scapy.Ether(dst="ff:ff:ff:ff:ff:ff") # sending a broadcast packet to all the devices on the network.
         arp_request_broadcast = broadcast_packet / arp_request_packet # combining the ARP and broadcast packet in a single packet.
         answered_list = scapy.srp(arp_request_broadcast, timeout=5, verbose=False)[0] # answered list to contain the devices that responed to arp packet. #scapy.srp returns 2 lists one answered and the other unanswered thats why [0] to store only the answered list.
-        answered_list_details = answered_list[0] #details of only answered list
-        MAC = answered_list_details[1].hwsrc # getting only the MAC address from the details.
-        return (MAC)
+        if answered_list:
+            answered_list_details = answered_list[0] #details of only answered list
+            MAC = answered_list_details[1].hwsrc # getting only the MAC address from the details.
+            return (MAC)
+        else:
+            pass
 
     def spoof(self, target_ip, spoof_ip):  # function to spoof the target.
         self.target_ip = target_ip
