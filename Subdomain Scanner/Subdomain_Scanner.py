@@ -38,7 +38,7 @@ def save_to_file(): # function to save output list to file.
         outfile.close()
 
 print("[+] How many threads you want to use? ")
-thread_count = input("[+] ")
+thread_count = int(input("[+] "))
 if (thread_count < 0 or thread_count > 200):
     print("[+] Please Enter threads in the range of 1 to 200.")
     exit()
