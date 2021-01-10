@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import requests
+import threading
 
 def get_domain():    # function to prompt user for target domain.
     print("[+] Enter the target domain. ")
@@ -11,6 +12,7 @@ def get_subdomain_list():  # get subdomain brute list from file.
     content = file.read()
     subdomains_list = content.splitlines() #split in lines to brute one by one.
     return subdomains_list
+
 
 discovered_subdomains = [] # list of discovered subdomains.
 def find_subdomains():
@@ -34,7 +36,24 @@ def save_to_file(): # function to save output list to file.
         for subdomain in discovered_subdomains:
             outfile.write(subdomain)
         outfile.close()
-        
+
+print("[+] How many threads you want to use? ")
+thread_count = input("[+] ")
+if (thread_count < 0 or thread_count > 200):
+    print("[+] Please Enter threads in the range of 1 to 200.")
+    exit()
+
+threads = []
+
+for _ in range(thread_count):
+    t = threading.Thread(target = find_subdomains)
+    t.start()
+    threads.append(t)
+
+for thread in threads:
+    thread.join()
+
+    
 find_subdomains()
 save_to_file()
 if KeyboardInterrupt: # exit if Keyboard Interrupt.
