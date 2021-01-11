@@ -3,6 +3,7 @@ import requests
 import threading
 import time
 
+
 start = time.perf_counter()
 
 class DirBust():
@@ -29,6 +30,7 @@ class DirBust():
     def find_directory_paths(self):
         for directory_path in self.directory_paths: # iterating over each directory path in directory_path list
             path = f"https://{self.domain}/{directory_path}"
+            self.directory_paths.pop(0)
             print("[+] Trying path : ", path)
 
             try:
@@ -77,7 +79,7 @@ if __name__ == "__main__":
         DB.save_to_file()
 
     except KeyboardInterrupt: #exit if keyboard interrupted. 
-        print("[-] Keyboard interrupt Triggered. ")
+        print("\n[-] Keyboard interrupt Triggered. ")
 
 finish = time.perf_counter()
 
