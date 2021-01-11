@@ -10,7 +10,7 @@ class DirBust():
 
     def get_domain(self):    # function to prompt user for target domain.
         print("[+] Enter the target domain. ")
-        self.target = input("[+]")
+        self.target = input("[+] ")
         return self.target
 
     def get_wordlist(self):  # get directory brute list from file.
