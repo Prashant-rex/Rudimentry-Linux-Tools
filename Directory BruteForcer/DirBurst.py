@@ -24,6 +24,7 @@ class DirBust():
         self.directory_paths = self.get_wordlist()
         self.domain = self.get_domain()
         self.threads = []
+        self.thread_count = self.get_threads()
     
     def find_directory_paths(self):
         for directory_path in self.directory_paths: # iterating over each directory path in directory_path list
@@ -47,12 +48,32 @@ class DirBust():
                 outfile.write(disovered_path + "\n")
             outfile.close()
 
+    def get_threads(self):
+        print("[+] How many threads you want to use? ")
+        self.thread_count = int(input("[+] "))
+        if (self.thread_count <= 0 or self.thread_count > 200):
+            print("[+] Please Enter threads in the range of 1 to 200.")
+            exit()
+        else:
+            return self.thread_count
+
+    def run_threads(self):
+        for _ in range(self.thread_count):
+            t = threading.Thread(target = self.find_directory_paths)
+            t.start()
+            self.threads.append(t)
+
+        for thread in self.threads:
+            thread.join()
+
+
+
 if __name__ == "__main__":
 
     try:
         DB = DirBust()   
 
-        DB.find_directory_paths()
+        DB.run_threads()
         DB.save_to_file()
 
     except KeyboardInterrupt: #exit if keyboard interrupted. 
