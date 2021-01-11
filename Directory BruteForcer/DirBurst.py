@@ -44,18 +44,19 @@ class DirBust():
     def save_to_file(self): # function to save output list to file.
         with open("Discovered_Directory_paths.txt", "w") as outfile:
             for disovered_path in self.discovered_directory_paths:
-                outfile.write(disovered_path)
+                outfile.write(disovered_path + "\n")
             outfile.close()
 
 if __name__ == "__main__":
-    
-    DB = DirBust()   
 
-    DB.find_directory_paths()
-    DB.save_to_file()
+    try:
+        DB = DirBust()   
 
-    if KeyboardInterrupt: # exit if Keyboard Interrupt.
-        print("[-] Keyboard innterupt Triggered. ")
+        DB.find_directory_paths()
+        DB.save_to_file()
+
+    except KeyboardInterrupt: #exit if keyboard interrupted. 
+        print("[-] Keyboard interrupt Triggered. ")
 
 finish = time.perf_counter()
 
