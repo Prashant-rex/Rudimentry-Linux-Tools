@@ -28,6 +28,7 @@ class DirBust():
     def find_directory_paths(self):
         for directory_path in self.directory_paths: # iterating over each directory path in directory_path list
             path = f"https://{self.domain}/{directory_path}"
+            print("[+] Trying path : ", path)
 
             try:
                 status = requests.get(path) # send get request to check if the path exists.
